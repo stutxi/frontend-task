@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Select from 'react-select';
 import './App.css'; 
+
 const App = () => {
   const [jsonInput, setJsonInput] = useState('');
   const [response, setResponse] = useState(null);
@@ -30,12 +31,34 @@ const App = () => {
     const options = selectedOptions.map(option => option.value);
     let dataToRender = {};
 
-    if (options.includes('Alphabets')) dataToRender.alphabets = response.alphabets;
-    if (options.includes('Numbers')) dataToRender.numbers = response.numbers;
-    if (options.includes('Highest lowercase alphabet')) dataToRender.highest_lowercase_alphabet = response.highest_lowercase_alphabet;
+    if (options.includes('Numbers')) {
+      dataToRender.numbers = response.numbers;
+    }
+    if (options.includes('Alphabets')) {
+      dataToRender.alphabets = response.alphabets;
+    }
+    if (options.includes('Highest lowercase alphabet')) {
+      dataToRender.highest_lowercase_alphabet = response.highest_lowercase_alphabet;
+    }
 
     return (
-      <pre>{JSON.stringify(dataToRender, null, 2)}</pre>
+      <div className="filtered-response">
+        {options.includes('Numbers') && dataToRender.numbers && (
+          <div>
+            <strong>Filtered Response Number:</strong> {dataToRender.numbers.join(', ')}
+          </div>
+        )}
+        {options.includes('Alphabets') && dataToRender.alphabets && (
+          <div>
+            <strong>Filtered Response Alphabets:</strong> {dataToRender.alphabets.join(', ')}
+          </div>
+        )}
+        {options.includes('Highest lowercase alphabet') && dataToRender.highest_lowercase_alphabet && (
+          <div>
+            <strong>Filtered Response Highest Lowercase Alphabet:</strong> {dataToRender.highest_lowercase_alphabet.join(', ')}
+          </div>
+        )}
+      </div>
     );
   };
 
@@ -61,6 +84,8 @@ const App = () => {
               { value: 'Highest lowercase alphabet', label: 'Highest lowercase alphabet' },
             ]}
             onChange={handleSelectChange}
+            className="select-dropdown"
+            placeholder="Select filters"
           />
           <div className="response-container">
             {renderResponse()}
